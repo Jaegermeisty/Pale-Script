@@ -1,21 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --primary: #333333;
-  --secondary: #555555;
-  --light: #f0f0f0;         
-  --dark: #1a1a1a;          
-  --gray: #777777;
-  --spacing: 1rem;
-}
-
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
   background: #F0F0F0;
   min-height: 100vh;
   display: flex;
@@ -24,11 +7,8 @@ body {
   padding: var(--spacing);
 }
 
-/* ===== CONTAINER ===== */
+
 .container {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
@@ -41,7 +21,6 @@ body {
   }
 }
 
-/* ===== HERO SECTION ===== */
 .hero {
   text-align: center;
 }
@@ -68,7 +47,6 @@ body {
   margin-right: auto;
 }
 
-/* ===== AUTH BUTTONS ===== */
 .auth-buttons {
   display: flex;
   flex-direction: column;
@@ -77,26 +55,13 @@ body {
   margin: 0 auto;
 }
 
-.btn {
-  display: inline-block;
-  padding: 0.8rem 2rem;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-}
-
 .btn-primary {
   background-color: var(--primary);
   color: white;
-  box-shadow: 0 4px 14px rgba(67, 97, 238, 0.3);
+  box-shadow: 0 4px 14px rgba(15, 19, 36, 0.3);
 }
 
-.btn-secondary {
+.btn.btn-secondary {
   background-color: transparent;
   color: var(--primary);
   border: 2px solid var(--primary);
@@ -104,7 +69,7 @@ body {
 
 .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(67, 97, 238, 0.4);
+  box-shadow: 0 6px 18px rgba(15, 19, 36, 0.3);
 }
 
 .btn:active {
