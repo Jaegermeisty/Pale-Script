@@ -1,0 +1,190 @@
+:root {
+  --primary: #333333;
+  --secondary: #555555;
+  --light: #f0f0f0;
+  --dark: #1a1a1a;
+  --gray: #777777;
+  --spacing: 1rem;
+}
+
+.auth-container {
+  max-width: 420px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.auth-toggle {
+  display: flex;
+  margin: 1.5rem 0 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--light);
+  border: 1px solid var(--gray);
+}
+
+.auth-toggle button {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth-toggle button.active {
+  background: var(--primary);
+  color: white;
+}
+
+.firebaseui-container {
+  margin-top: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.firebaseui-card-content {
+  padding: 0 !important;
+}
+
+.firebaseui-textfield.mdl-textfield {
+  width: 100% !important;
+  margin-bottom: 20px !important;
+  position: relative;
+  overflow: visible;
+  padding-top: 8px; /* Space for always-visible label */
+}
+
+/* ALWAYS show labels in the "floated" position */
+.firebaseui-label {
+  position: absolute !important;
+  top: -8px !important;
+  left: 10px !important;
+  font-size: 12px !important;
+  color: var(--gray) !important;
+  background: white !important;
+  padding: 0 6px !important;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* No need for focused/dirty states since we always show floated labels */
+.firebaseui-textfield.mdl-textfield.is-focused .firebaseui-label,
+.firebaseui-textfield.mdl-textfield.is-dirty .firebaseui-label {
+  /* Same as default state */
+  top: -8px !important;
+  color: var(--primary) !important;
+}
+
+.firebaseui-input {
+  border: 1px solid var(--gray) !important;
+  border-radius: 10px !important;
+  padding: 16px 18px !important;
+  font-size: 16px !important;
+  height: auto !important;
+  background: var(--light) !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* Remove Material Design underline */
+.firebaseui-textfield .mdl-textfield__label:after,
+.firebaseui-textfield .mdl-textfield__label:before {
+  display: none !important;
+}
+
+.firebaseui-input:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.2) !important;
+  outline: none !important;
+}
+
+.firebaseui-id-submit {
+  background-color: var(--primary) !important;
+  border-radius: 10px !important;
+  height: 50px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  margin-top: 10px !important;
+  transition: background-color 0.3s !important;
+}
+
+.firebaseui-id-submit:hover {
+  background-color: var(--dark) !important;
+}
+
+.firebaseui-link {
+  color: var(--primary) !important;
+  font-weight: 500 !important;
+}
+
+.firebaseui-error {
+  background: #ffeef0 !important;
+  border-radius: 10px !important;
+  padding: 14px !important;
+  margin: 20px 0 !important;
+  color: #e0245e !important;
+  border: 1px solid #f9cbcf !important;
+  font-size: 14px !important;
+}
+
+.auth-error {
+  background: #ffeef0;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 20px;
+  color: #e0245e;
+  border: 1px solid #f9cbcf;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .auth-toggle button {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+*:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.auth-toggle button.active {
+  background: var(--primary);
+  color: white;
+}
+
+.auth-toggle button:not(.active) {
+  background: var(--light);
+  color: var(--secondary);
+}
+
+.auth-toggle button:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+.auth-toggle button {
+  transition: all 0.3s ease;
+}
