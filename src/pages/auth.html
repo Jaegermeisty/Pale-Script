@@ -3,14 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sing In</title>
+  <title>Sign In</title>
   <link rel="stylesheet" href="/src/css/global.css">
   <link rel="stylesheet" href="/src/css/auth.css">
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.css" />
 </head>
 <body>
   <div class="auth-container">
     <h2>Welcome to PaleScript</h2>
     <div id="firebaseui-auth-container"></div>
   </div>
+
+  <!-- Firebase Core -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script> <!-- ADDED THIS LINE -->
+
+  <!-- FirebaseUI -->
+  <script src="/src/js/firebase-ui-auth.js"></script> <!-- LOCAL MODIFIED VERSION -->
+
+  <!-- Config -->
+  <script src="/src/js/firebase-config.js"></script>
+
+  <!-- Auth Logic -->
+  <script src="/src/js/auth.js"></script>
 </body>
 </html>
