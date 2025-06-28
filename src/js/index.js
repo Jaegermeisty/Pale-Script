@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // User is signed in, redirect to home page
-        window.location.href = '/home.html';
+        window.location.href = '/src/pages/home.html';
       }
       // If not signed in, do nothing (show landing page)
     });

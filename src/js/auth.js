@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         firebase.auth().onAuthStateChanged((user) => {
           if (user) {
             // User is signed in, redirect to home page
-            window.location.assign('pages/home.html');
+            window.location.assign('/src/pages/home.html');
           } else {
             // Initialize FirebaseUI if not signed in
             const uiConfig = {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
                 }
               ],
-              signInSuccessUrl: '/home.html',
+              signInSuccessUrl: '/src/pages/home.html',
               credentialHelper: firebaseui.auth.CredentialHelper.NONE,
               signInFlow: 'popup'
             };
