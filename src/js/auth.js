@@ -1,17 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const loader = document.getElementById('loader');
+  
   try {
     firebase.initializeApp(firebaseConfig);
     
-    // Set authentication persistence
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => {
-        // Check if user is already signed in
         firebase.auth().onAuthStateChanged((user) => {
           if (user) {
-            // User is signed in, redirect to home page
             window.location.assign('/src/pages/home.html');
           } else {
-            // Initialize FirebaseUI if not signed in
+            // Initialize FirebaseUI
             const uiConfig = {
               signInOptions: [
                 {
@@ -29,19 +28,25 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const ui = new firebaseui.auth.AuthUI(firebase.auth());
             ui.start('#firebaseui-auth-container', uiConfig);
+            
+            // Hide loader after UI renders
+            setTimeout(() => {
+              loader.classList.add('loader-hidden');
+              setTimeout(() => loader.remove(), 300);
+            }, 500);
           }
         });
       })
       .catch((error) => {
         console.error("Persistence error:", error);
-        document.getElementById('firebaseui-auth-container').innerHTML = `
-          <p class="error">${error.message}</p>
-        `;
+        loader.classList.add('loader-hidden');
+        setTimeout(() => loader.remove(), 300);
+        // ... error handling ...
       });
   } catch (error) {
     console.error("Firebase error:", error);
-    document.getElementById('firebaseui-auth-container').innerHTML = `
-      <p class="error">${error.message}</p>
-    `;
+    loader.classList.add('loader-hidden');
+    setTimeout(() => loader.remove(), 300);
+    // ... error handling ...
   }
 });
