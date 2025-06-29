@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const loader = document.getElementById('loader');
   
   try {
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
     
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
