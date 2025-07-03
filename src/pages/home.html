@@ -3,9 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
+  <title>PaleScript - Home</title>
+  <link rel="stylesheet" href="/src/css/global.css">
+  <link rel="stylesheet" href="/src/css/home.css">
 </head>
 <body>
-  <p>home</p>
+  <div id="loader">
+    <div class="loader-spinner"></div>
+  </div>
+  
+  <div id="home-container">
+    <header>
+      <h1 id="welcome-message">Welcome back, <span id="user-name">User</span>!</h1>
+      <button id="sign-out-btn">Sign Out</button>
+    </header>
+    
+    <main>
+      <div class="stats-container">
+        <div class="stat-card">
+          <h3>Total Books</h3>
+          <p id="book-count">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Last Login</h3>
+          <p id="last-login">Just now</p>
+        </div>
+      </div>
+      
+      <div class="actions">
+        <button class="action-btn" id="add-book-btn">
+          <span>📖</span> Add New Book
+        </button>
+        <button class="action-btn" id="view-library-btn">
+          <span>📚</span> View Library
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <!-- Config -->
+  <script src="/src/js/firebase-config.js"></script>
+  
+  <!-- Home Page Logic -->
+  <script src="/src/js/home.js"></script>
 </body>
 </html>
