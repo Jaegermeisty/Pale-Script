@@ -19,24 +19,33 @@
     </header>
     
     <main>
-      <div class="stats-container">
-        <div class="stat-card">
-          <h3>Total Books</h3>
-          <p id="book-count">0</p>
+      <div class="main-actions">
+        <div class="action-card" id="add-entry-btn">
+          <div class="action-icon icon-add"></div>
+          <div class="action-content">
+            <h3 class="action-title">Add New Entry</h3>
+            <p class="action-subtitle">Record your thoughts</p>
+          </div>
         </div>
-        <div class="stat-card">
-          <h3>Last Login</h3>
-          <p id="last-login">Just now</p>
+        <div class="action-card" id="statistics-btn">
+          <div class="action-icon icon-stats"></div>
+          <div class="action-content">
+            <h3 class="action-title">Statistics</h3>
+            <p class="action-subtitle">View your insights</p>
+          </div>
         </div>
       </div>
       
-      <div class="actions">
-        <button class="action-btn" id="add-book-btn">
-          <span>📖</span> Add New Book
-        </button>
-        <button class="action-btn" id="view-library-btn">
-          <span>📚</span> View Library
-        </button>
+      <div class="recent-section">
+        <div class="section-header">
+          <h2 class="section-title">Recent entries</h2>
+        </div>
+        
+        <div class="empty-state">
+          <div class="empty-icon"></div>
+          <h3 class="empty-title">No entries yet</h3>
+          <p class="empty-text">Start your reading journey by adding your first book entry</p>
+        </div>
       </div>
     </main>
   </div>
