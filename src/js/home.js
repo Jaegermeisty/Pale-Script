@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Get DOM elements
   const userNameElement = document.getElementById('user-name');
-  const bookCountElement = document.getElementById('book-count');
-  const lastLoginElement = document.getElementById('last-login');
   const signOutBtn = document.getElementById('sign-out-btn');
+  const addEntryBtn = document.getElementById('add-entry-btn');
+  const statisticsBtn = document.getElementById('statistics-btn');
   const loader = document.getElementById('loader');
   
   console.log('DOM loaded, starting auth state observer...');
@@ -94,14 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
           console.log('Setting display name to:', displayName);
           userNameElement.textContent = displayName;
           
-          // Update stats
-          bookCountElement.textContent = userData.bookCount || 0;
-          
-          // Format and display last login
-          const lastLogin = userData.lastLogin ? 
-            userData.lastLogin.toDate() : new Date();
-          lastLoginElement.textContent = formatDate(lastLogin);
-          
         } else {
           // User document doesn't exist - create it
           console.log('🔥 No user document found, creating new one...');
@@ -109,24 +101,28 @@ document.addEventListener('DOMContentLoaded', () => {
           const success = await createUserDocument(user);
           
           if (success) {
-            // Reload the page to display the newly created data
-            console.log("🔄 User document created, reloading to display data...");
-            window.location.reload();
+            // Set display name without reloading
+            console.log("✅ User document created successfully");
+            userNameElement.textContent = user.displayName || user.email?.split('@')[0] || 'Reader';
           } else {
             // Fallback to basic display without Firestore data
             console.log("⚠️ Using fallback display without Firestore data");
-            userNameElement.textContent = user.displayName || user.email || 'Reader';
-            bookCountElement.textContent = '0';
-            lastLoginElement.textContent = 'Just now';
+            userNameElement.textContent = user.displayName || user.email?.split('@')[0] || 'Reader';
           }
         }
         
       } catch (error) {
         console.error('Error loading user data:', error);
         // Fallback to basic display
-        userNameElement.textContent = user.displayName || user.email || 'Reader';
-        bookCountElement.textContent = '0';
-        lastLoginElement.textContent = 'Just now';
+        userNameElement.textContent = user.displayName || user.email?.split('@')[0] || 'Reader';
+      }
+      
+      // Hide loader once user data is loaded
+      if (loader) {
+        loader.classList.add('loader-hidden');
+        setTimeout(() => {
+          if (loader.parentNode) loader.parentNode.removeChild(loader);
+        }, 300);
       }
       
     } else {
@@ -135,25 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'index.html';
     }
   });
-  
-  // Function to format date
-  const formatDate = (date) => {
-    if (!date) return 'Just now';
-    
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / 60000);
-    
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins} minutes ago`;
-    
-    return date.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
   
   // Sign out functionality
   signOutBtn.addEventListener('click', () => {
@@ -164,23 +141,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  // Add book button functionality
-  document.getElementById('add-book-btn').addEventListener('click', () => {
-    alert('Add new book functionality coming soon!');
+  // Add new entry button functionality
+  addEntryBtn.addEventListener('click', () => {
+    alert('Add new entry functionality coming soon!');
   });
   
-  // View library button functionality
-  document.getElementById('view-library-btn').addEventListener('click', () => {
-    alert('View library functionality coming soon!');
+  // Statistics button functionality
+  statisticsBtn.addEventListener('click', () => {
+    alert('Statistics functionality coming soon!');
   });
 
-  // Hide loader after 1.5 seconds (safe fallback)
+  // Fallback loader hide (in case auth state doesn't change)
   setTimeout(() => {
-    if (loader) {
+    if (loader && !loader.classList.contains('loader-hidden')) {
       loader.classList.add('loader-hidden');
       setTimeout(() => {
         if (loader.parentNode) loader.parentNode.removeChild(loader);
       }, 300);
     }
-  }, 1500);
+  }, 3000);
 });
