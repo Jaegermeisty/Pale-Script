@@ -5,11 +5,21 @@
 }
 
 :root {
-  --primary: #333333;
-  --secondary: #555555;
-  --light: #f0f0f0;         
-  --dark: #1a1a1a;          
-  --gray: #777777;
+  --eerie-black: #262624;
+  --night: #141413;
+  --silver: #B0AEA4;
+  --jasper: #C96442;
+  --baby-powder: #FAF9F5;
+  
+  /* Elegant & sophisticated color assignments */
+  --primary: var(--night);           /* Deep charcoal for important elements */
+  --secondary: var(--eerie-black);   /* Medium dark for cards/containers */
+  --light: var(--baby-powder);       /* Cream background - elegant base */
+  --dark: var(--night);              /* Deepest for high contrast */
+  --gray: var(--silver);             /* Refined gray for subtle elements */
+  --accent: var(--jasper);           /* Perfect orange - keep unchanged */
+  --text-primary: var(--night);      /* Dark text on light - high contrast */
+  --text-secondary: var(--eerie-black); /* Slightly lighter for body text */
   --spacing: 1rem;
 }
 
@@ -17,7 +27,11 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   background: var(--light);
-  color: var(--dark);
+  color: var(--text-secondary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
 }
 
 .container {
@@ -46,7 +60,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: white;
+  background: var(--light);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,8 +76,8 @@ body {
 .loader-spinner {
   width: 50px;
   height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #333;
+  border: 5px solid var(--silver);
+  border-top: 5px solid var(--accent);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
