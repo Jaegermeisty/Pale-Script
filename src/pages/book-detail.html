@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Details - PaleScript</title>
+  <link rel="stylesheet" href="/src/css/global.css">
+  <link rel="stylesheet" href="/src/css/book-detail.css">
+</head>
+<body>
+  <div id="loader">
+    <div class="loader-spinner"></div>
+  </div>
+  
+  <div class="book-detail-container">
+    <!-- Header -->
+    <header class="book-header">
+      <button id="back-btn" class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to Library
+      </button>
+      
+      <button id="new-entry-btn" class="new-entry-btn">
+        New Entry
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Book Information Section -->
+    <section class="book-info-section">
+      <div class="book-cover-large">
+        <div class="book-cover-placeholder-large" id="book-cover-placeholder-large">
+          <span id="book-title-display">Loading...</span>
+        </div>
+        <img id="book-cover-image-large" style="display: none;" alt="Book cover" />
+      </div>
+      
+      <div class="book-details-large">
+        <h2 class="book-title-main" id="book-title-main">Loading...</h2>
+        <p class="book-author-main" id="book-author-main">Loading...</p>
+        <p class="book-year-main" id="book-year-main">Loading...</p>
+        <div class="book-stats">
+          <div class="stat-item">
+            <span class="stat-number" id="total-entries">0</span>
+            <span class="stat-label">Total Entries</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="total-chapters">0</span>
+            <span class="stat-label">Chapters</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+      <div class="filter-group">
+        <label for="chapter-filter">Filter by Chapter:</label>
+        <select id="chapter-filter" class="chapter-dropdown">
+          <option value="">All Chapters</option>
+          <!-- Chapters will be populated dynamically -->
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="tag-search">Search by Tags:</label>
+        <div class="tag-search-container">
+          <input type="text" id="tag-search" placeholder="Type tags separated by commas..." />
+          <button id="clear-filters" class="clear-btn">Clear</button>
+        </div>
+        <div class="active-tags" id="active-tags"></div>
+      </div>
+    </section>
+
+    <!-- Entries Section -->
+    <section class="entries-section">
+      <div class="entries-header">
+        <h3 class="entries-title">Your Entries</h3>
+        <span class="entries-count" id="entries-count">0 entries</span>
+      </div>
+      
+      <div class="entries-container" id="entries-container">
+        <!-- Entries will be loaded here -->
+      </div>
+      
+      <div class="no-entries" id="no-entries" style="display: none;">
+        <div class="no-entries-icon">📝</div>
+        <h4>No entries found</h4>
+        <p>Try adjusting your filters or add a new entry for this book.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notification" id="toast-notification">
+    <div class="toast-content">
+      <div class="toast-icon" id="toast-icon"></div>
+      <div class="toast-message" id="toast-message"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <!-- Config -->
+  <script src="/src/js/firebase-config.js"></script>
+  
+  <!-- Book Detail Page Logic -->
+  <script src="/src/js/book-detail.js"></script>
+</body>
+</html>
