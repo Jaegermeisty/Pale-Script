@@ -202,9 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.book-card').forEach(card => {
       card.addEventListener('click', () => {
         const bookId = card.dataset.bookId;
-        // TODO: Navigate to book detail page
-        console.log('Clicked book:', bookId);
-        alert(`Book detail page for ${bookId} coming soon!`);
+        // Navigate to book detail page
+        window.location.href = `/src/pages/book-detail.html?id=${bookId}`;
       });
     });
   };
