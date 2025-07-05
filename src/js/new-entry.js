@@ -42,6 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentBookData = null;
   let tags = [];
   
+  // Check for pre-filled book data from URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const prefilledBookId = urlParams.get('bookId');
+  
   // Debounce function for search input (define early so it can be used)
   const debounce = (func, wait) => {
     let timeout;
@@ -72,10 +76,80 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   
+  // Function to load and display prefilled book data
+  const loadPrefilledBookData = async () => {
+    if (!prefilledBookId || !currentUser) return;
+    
+    try {
+      console.log('📚 Loading prefilled book data for ID:', prefilledBookId);
+      
+      // Get book document from Firestore
+      const bookDoc = await db.collection('users').doc(currentUser.uid)
+        .collection('books').doc(prefilledBookId).get();
+      
+      if (!bookDoc.exists) {
+        console.error('Prefilled book not found');
+        showToast('Book not found', 'error');
+        return;
+      }
+      
+      const bookData = bookDoc.data();
+      console.log('📖 Prefilled book data:', bookData);
+      
+      // Set current book data
+      currentBookData = {
+        id: prefilledBookId,
+        title: bookData.title,
+        authors: bookData.authors,
+        publishYear: bookData.publishYear,
+        coverUrl: bookData.coverUrl,
+        isbn: bookData.isbn,
+        source: bookData.source
+      };
+      
+      // Display book info and show entry form immediately
+      displayBookInfo(currentBookData);
+      
+      // Disable mode switching when book is prefilled
+      modeBtns.forEach(btn => {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'not-allowed';
+      });
+      
+      // Hide all book input sections since book is already selected
+      isbnSection.style.display = 'none';
+      manualSection.style.display = 'none';
+      existingSection.style.display = 'none';
+      
+      // Show a message indicating the book is pre-selected
+      const bookInputSection = document.querySelector('.book-input-section');
+      bookInputSection.innerHTML = `
+        <div style="text-align: center; padding: 1rem; background: rgba(201, 100, 66, 0.05); border-radius: 12px; border: 1px solid rgba(201, 100, 66, 0.1);">
+          <p style="margin: 0; color: var(--accent); font-weight: 500;">
+            Book pre-selected! You can start writing your entry below.
+          </p>
+        </div>
+      `;
+      
+      console.log('✅ Book data prefilled successfully');
+      
+    } catch (error) {
+      console.error('Error loading prefilled book data:', error);
+      showToast('Error loading book data', 'error');
+    }
+  };
+  
   // Check authentication
-  auth.onAuthStateChanged((user) => {
+  auth.onAuthStateChanged(async (user) => {
     if (user) {
       currentUser = user;
+      
+      // Load prefilled book data if bookId is provided
+      if (prefilledBookId) {
+        await loadPrefilledBookData();
+      }
+      
       hideLoader();
     } else {
       window.location.href = '/src/pages/auth.html';
@@ -94,10 +168,15 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Back button
   backBtn.addEventListener('click', () => {
-    window.location.href = '/src/pages/home.html';
+    // If we came from a book detail page, go back there
+    if (prefilledBookId) {
+      window.location.href = `/src/pages/book-detail.html?id=${prefilledBookId}`;
+    } else {
+      window.location.href = '/src/pages/home.html';
+    }
   });
   
-  // Mode switching
+  // Mode switching (only if not prefilled)
   modeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const mode = btn.dataset.mode;
@@ -106,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   const switchMode = (mode) => {
-    if (mode === currentMode) return;
+    if (mode === currentMode || prefilledBookId) return;
     
     // Save current mode data before switching
     saveCurrentModeData();
@@ -324,8 +403,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   
-
-  
   const showManualBookInfo = () => {
     const title = titleInput.value.trim();
     const author = authorInput.value.trim();
@@ -521,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     try {
       // Create book identifier
-      const bookId = currentBookData.isbn || 
+      const bookId = currentBookData.id || currentBookData.isbn || 
         `manual_${currentBookData.title.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${currentBookData.authors[0].toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
       
       // Get chapter name (default to "General Notes" if empty)
@@ -590,10 +667,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
       
-      // Success - redirect to home
+      // Success - redirect appropriately
       showSuccess('Entry saved successfully!');
       setTimeout(() => {
-        window.location.href = '/src/pages/home.html';
+        if (prefilledBookId) {
+          // Go back to the book detail page
+          window.location.href = `/src/pages/book-detail.html?id=${prefilledBookId}`;
+        } else {
+          // Go to home
+          window.location.href = '/src/pages/home.html';
+        }
       }, 1500);
       
     } catch (error) {
