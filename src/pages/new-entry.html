@@ -3,12 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Entry</title>
+  <title>New Entry - PaleScript</title>
+  <link rel="stylesheet" href="/src/css/global.css">
   <link rel="stylesheet" href="/src/css/new-entry.css">
 </head>
 <body>
+  <div id="loader">
+    <div class="loader-spinner"></div>
+  </div>
   
+  <div class="entry-container">
+    <header class="entry-header">
+      <button id="back-btn" class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back
+      </button>
+      <h1 class="page-title">New Entry</h1>
+    </header>
 
+    <main class="entry-main">
+      <!-- Mode Toggle -->
+      <div class="mode-section">
+        <div class="mode-toggle">
+          <button class="mode-btn active" data-mode="auto">Auto</button>
+          <button class="mode-btn" data-mode="manual">Manual</button>
+          <button class="mode-btn" data-mode="existing">Existing</button>
+        </div>
+        <div class="help-icon" data-tooltip="Auto: Find book info using ISBN. Manual: Enter details yourself. Existing: Search books you've already added.">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <path d="m9,9a3,3 0 1,1 6,0c0,2 -3,3 -3,3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="m12,17l.01,0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Book Input Section -->
+      <div class="book-input-section">
+        <!-- Auto Mode: ISBN Search -->
+        <div class="isbn-section" id="isbn-section">
+          <div class="input-group">
+            <label for="isbn-input">
+              ISBN
+              <div class="help-icon" data-tooltip="Enter the 10 or 13 digit ISBN found on your book to automatically retrieve book information.">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="m9,9a3,3 0 1,1 6,0c0,2 -3,3 -3,3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="m12,17l.01,0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </label>
+            <div class="input-with-button">
+              <input type="text" id="isbn-input" placeholder="Enter ISBN..." />
+              <button id="search-btn" class="search-btn">Search</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manual Mode: Title/Author -->
+        <div class="manual-section" id="manual-section" style="display: none;">
+          <div class="input-group">
+            <label for="title-input">Book Title</label>
+            <input type="text" id="title-input" placeholder="Enter book title..." />
+          </div>
+          <div class="input-group">
+            <label for="author-input">Author</label>
+            <input type="text" id="author-input" placeholder="Enter author name..." />
+          </div>
+        </div>
+
+        <!-- Existing Mode: Search Your Books -->
+        <div class="existing-section" id="existing-section" style="display: none;">
+          <div class="input-group">
+            <label for="existing-search-input">
+              Search Your Books
+              <div class="help-icon" data-tooltip="Search for books you've already added to quickly create new entries.">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="m9,9a3,3 0 1,1 6,0c0,2 -3,3 -3,3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="m12,17l.01,0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </label>
+            <input type="text" id="existing-search-input" placeholder="Type book title or author..." />
+            
+            <!-- Search Results -->
+            <div class="search-results" id="search-results" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Info Display -->
+      <div class="book-info" id="book-info" style="display: none;">
+        <div class="book-cover" id="book-cover">
+          <div class="book-cover-placeholder" id="book-cover-placeholder">
+            <span id="book-title-display">Book Title</span>
+          </div>
+          <img id="book-cover-image" style="display: none;" alt="Book cover" />
+        </div>
+        <div class="book-details">
+          <h3 id="book-title-text">Book Title</h3>
+          <p id="book-author-text">Author Name</p>
+          <p id="book-year-text">Publication Year</p>
+        </div>
+      </div>
+
+      <!-- Entry Form -->
+      <div class="entry-form" id="entry-form" style="display: none;">
+        <div class="input-group">
+          <label for="chapter-input">Chapter (optional)</label>
+          <input type="text" id="chapter-input" placeholder="e.g., Chapter 1, Part Two, Introduction..." />
+          <div class="chapter-help-text">
+            💡 If left empty, entries will be saved under "General Notes"
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="tags-input">
+            Tags (optional)
+            <span class="tag-counter">0/20</span>
+          </label>
+          <input type="text" id="tags-input" placeholder="Add tags separated by commas..." />
+          <div class="tags-display" id="tags-display"></div>
+        </div>
+
+        <div class="input-group">
+          <label for="content-input">Your Thoughts</label>
+          <textarea id="content-input" placeholder="Share your reflections, insights, and thoughts about this book..." rows="8"></textarea>
+        </div>
+
+        <button id="save-btn" class="save-btn">Save Entry</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Tooltip -->
+  <div class="tooltip" id="tooltip"></div>
+  
+  <!-- Toast Notification -->
+  <div class="toast-notification" id="toast-notification">
+    <div class="toast-content">
+      <div class="toast-icon" id="toast-icon"></div>
+      <div class="toast-message" id="toast-message"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <!-- Config -->
+  <script src="/src/js/firebase-config.js"></script>
+  
+  <!-- Entry Page Logic -->
   <script src="/src/js/new-entry.js"></script>
 </body>
 </html>
