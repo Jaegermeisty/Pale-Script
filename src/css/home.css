@@ -238,6 +238,118 @@ header {
   color: #86868b;
 }
 
+/* Books Grid */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 2rem 1.5rem;
+  padding: 1rem 0;
+}
+
+.book-card {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  flex-direction: column;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+}
+
+.book-card:hover .book-cover-section {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.book-cover-section {
+  position: relative;
+  margin-bottom: 0.75rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  aspect-ratio: 2/3;
+}
+
+.book-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+.book-cover-placeholder span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6c757d;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.book-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.book-author {
+  font-size: 0.75rem;
+  color: #86868b;
+  margin: 0 0 0.5rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  margin-top: auto;
+}
+
+.book-entries-count {
+  background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  font-weight: 500;
+  text-align: center;
+  font-size: 0.65rem;
+}
+
+.book-last-entry {
+  color: #86868b;
+  text-align: center;
+  font-size: 0.65rem;
+  opacity: 0.8;
+}
+
 @media (max-width: 768px) {
   #home-container {
     padding: 2rem 1rem;
@@ -292,5 +404,18 @@ header {
   
   .empty-text {
     font-size: 0.95rem;
+  }
+  
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  
+  .book-cover-section {
+    height: 140px;
+  }
+  
+  .book-info {
+    padding: 0.75rem;
   }
 }

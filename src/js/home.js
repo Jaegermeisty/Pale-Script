@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const addEntryBtn = document.getElementById('add-entry-btn');
   const statisticsBtn = document.getElementById('statistics-btn');
   const loader = document.getElementById('loader');
+  const emptyState = document.getElementById('empty-state');
+  const booksGrid = document.getElementById('books-grid');
   
   console.log('DOM loaded, starting auth state observer...');
   
@@ -58,6 +60,166 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
       }
     }
+  };
+  
+  // Function to load and display books
+  const loadBooks = async (userId) => {
+    try {
+      console.log('📚 Loading books for user:', userId);
+      
+      // Get all books for the user
+      const booksSnapshot = await db.collection('users').doc(userId).collection('books').get();
+      
+      if (booksSnapshot.empty) {
+        console.log('No books found');
+        emptyState.style.display = 'flex';
+        booksGrid.style.display = 'none';
+        return;
+      }
+      
+      const books = [];
+      
+      // For each book, get entry count and most recent entry
+      for (const bookDoc of booksSnapshot.docs) {
+        const bookData = bookDoc.data();
+        const bookId = bookDoc.id;
+        
+        try {
+          console.log(`📖 Processing book: ${bookData.title}`);
+          
+          // Get all chapters for this book
+          const chaptersSnapshot = await db.collection('users').doc(userId)
+            .collection('books').doc(bookId)
+            .collection('chapters').get();
+          
+          let totalEntries = 0;
+          let mostRecentEntryDate = null;
+          
+          // For each chapter, count entries and find most recent
+          for (const chapterDoc of chaptersSnapshot.docs) {
+            const chapterId = chapterDoc.id;
+            
+            // Get all entries in this chapter
+            const entriesSnapshot = await db.collection('users').doc(userId)
+              .collection('books').doc(bookId)
+              .collection('chapters').doc(chapterId)
+              .collection('entries')
+              .orderBy('createdAt', 'desc')
+              .get();
+            
+            totalEntries += entriesSnapshot.size;
+            
+            // Check if this chapter has the most recent entry
+            if (!entriesSnapshot.empty) {
+              const firstEntry = entriesSnapshot.docs[0];
+              const entryDate = firstEntry.data().createdAt;
+              
+              if (!mostRecentEntryDate || entryDate > mostRecentEntryDate) {
+                mostRecentEntryDate = entryDate;
+              }
+            }
+          }
+          
+          console.log(`📊 Book "${bookData.title}": ${totalEntries} entries, last: ${mostRecentEntryDate}`);
+          
+          // Use book creation date if no entries found
+          const lastEntryDate = mostRecentEntryDate || bookData.createdAt || new Date(0);
+          
+          books.push({
+            id: bookId,
+            ...bookData,
+            entryCount: totalEntries,
+            lastEntryDate: lastEntryDate
+          });
+          
+        } catch (error) {
+          console.error(`Error loading entries for book ${bookId}:`, error);
+          // Add book without entry data if there's an error
+          books.push({
+            id: bookId,
+            ...bookData,
+            entryCount: 0,
+            lastEntryDate: bookData.createdAt || new Date(0)
+          });
+        }
+      }
+      
+      // Sort books by most recent entry date (newest first)
+      books.sort((a, b) => {
+        const dateA = a.lastEntryDate?.toDate ? a.lastEntryDate.toDate() : new Date(a.lastEntryDate);
+        const dateB = b.lastEntryDate?.toDate ? b.lastEntryDate.toDate() : new Date(b.lastEntryDate);
+        return dateB - dateA;
+      });
+      
+      console.log('📚 Final books with counts:', books);
+      displayBooks(books);
+      
+    } catch (error) {
+      console.error('Error loading books:', error);
+      emptyState.style.display = 'flex';
+      booksGrid.style.display = 'none';
+    }
+  };
+  
+  // Function to display books in the grid
+  const displayBooks = (books) => {
+    if (books.length === 0) {
+      emptyState.style.display = 'flex';
+      booksGrid.style.display = 'none';
+      return;
+    }
+    
+    emptyState.style.display = 'none';
+    booksGrid.style.display = 'grid';
+    
+    booksGrid.innerHTML = books.map(book => {
+      const lastEntryDate = book.lastEntryDate?.toDate ? book.lastEntryDate.toDate() : new Date(book.lastEntryDate);
+      const timeAgo = getTimeAgo(lastEntryDate);
+      
+      return `
+        <div class="book-card" data-book-id="${book.id}">
+          <div class="book-cover-section">
+            ${book.coverUrl ? 
+              `<img src="${book.coverUrl}" alt="${book.title}" class="book-cover-image" />` :
+              `<div class="book-cover-placeholder">
+                <span>${book.title}</span>
+              </div>`
+            }
+          </div>
+          <div class="book-info">
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-author">${book.authors.join(', ')}</p>
+            <div class="book-meta">
+              <span class="book-entries-count">${book.entryCount} ${book.entryCount === 1 ? 'entry' : 'entries'}</span>
+              <span class="book-last-entry">${timeAgo}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    // Add click handlers to book cards
+    document.querySelectorAll('.book-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const bookId = card.dataset.bookId;
+        // TODO: Navigate to book detail page
+        console.log('Clicked book:', bookId);
+        alert(`Book detail page for ${bookId} coming soon!`);
+      });
+    });
+  };
+  
+  // Helper function to format time ago
+  const getTimeAgo = (date) => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+    if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)}mo ago`;
+    return `${Math.floor(diffInSeconds / 31536000)}y ago`;
   };
   
   // Use auth state observer
@@ -111,10 +273,15 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         
+        // Load books after user setup
+        await loadBooks(userId);
+        
       } catch (error) {
         console.error('Error loading user data:', error);
         // Fallback to basic display
         userNameElement.textContent = user.displayName || user.email?.split('@')[0] || 'Reader';
+        emptyState.style.display = 'flex';
+        booksGrid.style.display = 'none';
       }
       
       // Hide loader once user data is loaded
