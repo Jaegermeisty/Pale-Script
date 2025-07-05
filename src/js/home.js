@@ -141,9 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  // Add new entry button functionality
+  // Add new entry button functionality - navigate to new entry page
   addEntryBtn.addEventListener('click', () => {
-    alert('Add new entry functionality coming soon!');
+    window.location.href = '/src/pages/new-entry.html';
   });
   
   // Statistics button functionality
